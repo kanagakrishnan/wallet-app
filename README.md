@@ -13,8 +13,8 @@ This is a simple wallet application built with Ruby on Rails. The application al
 
 ## Requirements
 
-- Ruby 3.0.0
-- Rails 6.1.4
+- Ruby 3.4.2
+- Rails 8.0.1
 - PostgreSQL (for development and testing)
 
 ## Setup
