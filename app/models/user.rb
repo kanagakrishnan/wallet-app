@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :wallets
+  has_one :wallet
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true

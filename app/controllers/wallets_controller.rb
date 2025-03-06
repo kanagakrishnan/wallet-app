@@ -53,33 +53,15 @@ class WalletsController < ApplicationController
   end
 
   def deposit
-    @wallet = Wallet.find_by(id: params[:id])
-    if @wallet
-      amount = params[:amount].to_f
-      begin
-        @wallet.deposit(amount)
-        render json: @wallet
-      rescue ArgumentError => e
-        render json: { error: e.message }, status: :unprocessable_entity
-      end
-    else
-      render json: { error: 'Wallet not found' }, status: :not_found
-    end
+    @wallet = Wallet.find(params[:id])
+    @wallet.deposit(params[:amount].to_f)
+    render json: { balance: @wallet.balance }
   end
 
   def withdraw
-    @wallet = Wallet.find_by(id: params[:id])
-    if @wallet
-      amount = params[:amount].to_f
-      begin
-        @wallet.withdraw(amount)
-        render json: @wallet
-      rescue ArgumentError => e
-        render json: { error: e.message }, status: :unprocessable_entity
-      end
-    else
-      render json: { error: 'Wallet not found' }, status: :not_found
-    end
+    @wallet = Wallet.find(params[:id])
+    @wallet.withdraw(params[:amount].to_f)
+    render json: { balance: @wallet.balance }
   end
 
   def transfer
@@ -99,14 +81,15 @@ class WalletsController < ApplicationController
   end
 
   def user_balance
-    @wallet = Wallet.find_by_user_id(params[:user_id])
+    @user = User.find(params[:user_id])
+    @wallet = @user.wallet
     render json: { balance: @wallet.balance }
   end
 
   def user_transactions
-    @wallet = Wallet.find_by_user_id(params[:user_id])
-    @transactions = @wallet.transactions
-    render json: @transactions
+    @user = User.find(params[:user_id])
+    @wallet = @user.wallet
+    render json: @wallet.transactions
   end
 
   private
